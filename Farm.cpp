@@ -94,6 +94,30 @@ class Farm
 		//-----------------------------------------
 		// check functions :
 		
+		bool check_ill_total()
+		{
+			bool is_sick = false;
+			node *head = &all_pigs;
+			get_all_pigs(&all_pigs);
+			head = head->next_node;
+			for(;;)
+			{
+				if(head != nullptr)
+				{
+					if(head->pig.get_if_sick())
+					{
+						is_sick = true;
+					}
+					head = head->next_node;
+				}
+				else
+				{
+					break;
+				}
+			}
+			return is_sick;
+		}
+		
 		bool check_full()
 		{
 			update_pig_num();
@@ -189,7 +213,7 @@ class Farm
 		void show_pig_nums()
 		{
 			update_pig_num();
-			cout<<"-- B-P:"<<b_p_num<<"  L-P:"<<l_p_num<<"  B-W-P:"<<b_w_p_num<<"  Total:"<<total<<" --"<<'\n';
+			cout<<"--B-P:"<<b_p_num<<"  L-P:"<<l_p_num<<"  B-W-P:"<<b_w_p_num<<"  Total:"<<total<<"--"<<'\n';
 		}
 		
 		void update_pig_num_chain(node *node_head)
@@ -228,6 +252,10 @@ class Farm
 		{
 			for(int i = 0;i < 100;i++)
 			{
+				pigpens[i].has_ill = pigpens[i].check_if_ill();
+			}
+			for(int i = 0;i < 100;i++)
+			{
 				if(i == 0)
 				{
 					if(pigpens[99].check_if_ill() || pigpens[1].check_if_ill())
@@ -240,6 +268,10 @@ class Farm
 						{
 							pigpens[i].going_to_ill = false;
 						}
+					}
+					else
+					{
+						pigpens[i].going_to_ill = false;
 					}
 				}
 				else if(i == 99)
@@ -255,6 +287,10 @@ class Farm
 							pigpens[i].going_to_ill = false;
 						}
 					}
+					else
+					{
+						pigpens[i].going_to_ill = false;
+					}
 				}
 				else
 				{
@@ -268,6 +304,10 @@ class Farm
 						{
 							pigpens[i].going_to_ill = false;
 						}
+					}
+					else
+					{
+						pigpens[i].going_to_ill = false;
 					}
 				}
 			}
@@ -368,6 +408,37 @@ class Farm
 			system("pause");
 		}
 		
+		void cure_pigs(int num)
+		{
+			main_rule.cure_num = 0;
+			node *head = &all_pigs;
+			int i = 0;
+			get_all_pigs(&all_pigs,&new_pigs);
+			head = head->next_node;
+			for(;;)
+			{
+				if(head != nullptr)
+				{
+					if(head->pig.get_if_sick())
+					{
+						if(main_rule.money >= 50)
+						{
+							main_rule.money -= 50;
+							head->pig.set_sick(false);
+							main_rule.cure_num++;
+							i++;
+						}
+					}
+					head = head->next_node;
+				}
+				if(i >= num || main_rule.money < 50 || !check_ill_total() || head == nullptr)
+				{
+					break;
+				}
+			}
+			pig_distributor();
+		}
+		
 		void pig_distributor()
 		{
 			float b_p_cage_num = 0;
@@ -397,7 +468,7 @@ class Farm
 						break;
 					}
 				}
-				if(check_empty_chain(&b_p))
+				if(check_empty_chain(&b_p) || check_full())
 				{
 					break;
 				}
@@ -416,7 +487,7 @@ class Farm
 						break;
 					}
 				}
-				if(check_empty_chain(&n_b_p))
+				if(check_empty_chain(&n_b_p) || check_full())
 				{
 					break;
 				}

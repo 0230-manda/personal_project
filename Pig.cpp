@@ -107,6 +107,11 @@ class Pig
 			variety = Empty;
 		}
 		
+		void set_sick_day(int i)
+		{
+			sick_day = i;
+		}
+		
 		//---------------------------------------------------
 		// get-functions:
 		

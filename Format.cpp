@@ -19,6 +19,7 @@ struct rule
 	float sold_money;
 	
 	int dead_pig;
+	int cure_num;
 	
 	int day;
 	float money;
@@ -35,6 +36,7 @@ struct rule
 		day = 0;
 		money = 0;
 		dead_pig = 0;
+		cure_num = 0;
 		max_rand_per_time = 100;
 	}
 	
@@ -137,6 +139,7 @@ void loop_display()
 	cout<<"      "<<"5. Into the next month(30 days)"<<'\n';
 	cout<<"      "<<"6. Randomly set one pig sick"<<'\n';
 	cout<<"      "<<"7. Check status by variety"<<'\n';
+	cout<<"      "<<"8. Cure pigs (Spend money , 50$ per pig) ."<<'\n';
 	cout<<"      "<<"Other input: exit the program"<<'\n';
 }
 

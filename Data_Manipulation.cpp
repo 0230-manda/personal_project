@@ -349,6 +349,7 @@ void remove_node(node *node_head,node *oprt_node)
 void sell_chain(node *node_head)
 {
 	node *node_ = node_head;
+	node *temp = node_;
 	if(node_->next_node == nullptr)
 	{
 		
@@ -356,46 +357,48 @@ void sell_chain(node *node_head)
 	else
 	{
 		node_ = node_->next_node;
+		temp = node_;
+		node_ = node_->next_node;
 		for(;;)
 		{
 			if(node_ != nullptr)
 			{
-				switch(node_->pig.get_variety())
+				switch(temp->pig.get_variety())
 				{
 					case Black_Pig:
-						if(node_->pig.get_weight() > main_rule.weight || node_->pig.get_age() > main_rule.age)
+						if(temp->pig.get_weight() > main_rule.weight || temp->pig.get_age() > main_rule.age)
 						{
-							if(node_->pig.get_if_sick() != true)
+							if(temp->pig.get_if_sick() != true)
 							{
-								main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_black_pig;
+								main_rule.sold_money += temp->pig.get_weight() * main_rule.price_of_black_pig;
 								main_rule.sold_b_p++;
-								delete_node(node_head,*node_);
+								delete_node(node_head,*temp);
 							}	
 						}
 						
 						break;
 						
 					case Little_Pig:
-						if(node_->pig.get_weight() > main_rule.weight || node_->pig.get_age() > main_rule.age)
+						if(temp->pig.get_weight() > main_rule.weight || temp->pig.get_age() > main_rule.age)
 						{
-							if(node_->pig.get_if_sick() != true)
+							if(temp->pig.get_if_sick() != true)
 							{
-								main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_little_pig;
+								main_rule.sold_money += temp->pig.get_weight() * main_rule.price_of_little_pig;
 								main_rule.sold_l_p++;
-								delete_node(node_head,*node_);
+								delete_node(node_head,*temp);
 							}
 						}
 						
 						break;
 						
 					case Big_White_Pig:
-						if(node_->pig.get_weight() > main_rule.weight || node_->pig.get_age() > main_rule.age)
+						if(temp->pig.get_weight() > main_rule.weight || temp->pig.get_age() > main_rule.age)
 						{
-							if(node_->pig.get_if_sick() != true)
+							if(temp->pig.get_if_sick() != true)
 							{
-								main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_big_white_pig;
+								main_rule.sold_money += temp->pig.get_weight() * main_rule.price_of_big_white_pig;
 								main_rule.sold_b_w_p++;
-								delete_node(node_head,*node_);
+								delete_node(node_head,*temp);
 							}
 						}
 						
@@ -404,6 +407,7 @@ void sell_chain(node *node_head)
 					default:
 						break;
 				}
+				temp = node_;
 				node_ = node_->next_node;
 			}
 			else
@@ -577,6 +581,10 @@ void chain_end_day(node *node_head)
 					if(temp->pig.get_if_sick())
 					{
 						temp->pig.sick_day_plus(1);
+					}
+					else
+					{
+						temp->pig.set_sick_day(0);
 					}
 					if(temp->pig.get_if_die())
 					{

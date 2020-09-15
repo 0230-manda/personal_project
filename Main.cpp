@@ -116,7 +116,7 @@ int main()
 	while(true)
 	{
 		system("cls");
-		if(main_rule.day % 90 == 0 && main_rule.day != 0 && loop_num == 0)
+		if(main_rule.day % 90 >= 0 && main_rule.day != 0 && main_rule.day - (loop_num + 1) * 90 >= 0)
 		{
 			loop_num++;
 			main_farm.sell_pigs();
@@ -217,7 +217,6 @@ int main()
 				
 			case '4':
 				main_farm.end_day();
-				loop_num = 0;
 				break;
 				
 				
@@ -226,7 +225,6 @@ int main()
 				{
 					main_farm.end_day();
 				}
-				loop_num = 0;
 				break;
 			
 			
@@ -266,6 +264,37 @@ int main()
 						main_farm.show_single_variety_info(Big_White_Pig);
 						break;
 				}
+				break;
+			
+			
+			case '8':
+				print_string("Please enter the number of pigs you want to cure.");
+				for(;;)
+				{
+					oprt_num = enter_num();
+					if(oprt_num < 0)
+					{
+						cout<<'\n';
+						print_tip("Invalid input!  Please enter a number larger than 0!");
+					}
+					else
+					{
+						break;
+					}
+				}
+				main_farm.cure_pigs(oprt_num);
+				refresh_screen();
+				print_line();
+				print_string("          Successfully cured some pigs!");
+				cout<<'\n'<<'\n';
+				cout<<"           Total "<<main_rule.cure_num<<" pig(s) were cured!"<<'\n';
+				cout<<'\n'<<'\n';
+				if(main_rule.money < 50)
+				{
+					cout<<"           Running out of money!"<<'\n';
+				}
+				print_line();
+				system("pause");
 				break;
 			
 			
