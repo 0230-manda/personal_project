@@ -104,8 +104,9 @@ int main()
 	//=================================================
 	print_line();
 	print_string("Now let's start to keep these pigs!");
+	print_string("(By the way , we asume that pigs will die in 10 days if they were ill.)");
 	print_line();
-	Sleep(1000);
+	Sleep(3000);
 	refresh_screen();
 	//
 	//
@@ -133,6 +134,13 @@ int main()
 		show_basic_info();
 		main_farm.show_pig_nums();
 		print_thick_line();
+		if(main_rule.dead_pig != 0)
+		{
+			print_line();
+			cout<<"There are "<<main_rule.dead_pig<<" pigs died because disease."<<'\n';
+			print_line();
+			main_rule.dead_pig = 0;
+		}
 		loop_display();
 		oprt = enter_char();
 		switch(oprt)
@@ -220,12 +228,51 @@ int main()
 				}
 				loop_num = 0;
 				break;
-				
-				
+			
+			
+			case '6':
+				main_farm.set_pig_ill_rand();
+				break;
+			
+			
+			case '7':
+				print_string("Please enter the variety:");
+				print_string("(1 for B_P , 2 for L_P , 3 for B_W_P.)");
+				oprt_num = enter_num();
+				for(;;)
+				{
+					if(oprt_num != 1 && oprt_num != 2 && oprt_num != 3)
+					{
+						print_tip("Invalid input!  Please enter 1 , 2 or 3");
+						cout<<'\n'<<'\n';
+						oprt_num = enter_num();
+					}
+					else
+					{
+						break;
+					}
+				}
+				switch(oprt_num)
+				{
+					case 1:
+						main_farm.show_single_variety_info(Black_Pig);
+						break;
+						
+					case 2:
+						main_farm.show_single_variety_info(Little_Pig);
+						break;
+						
+					case 3:
+						main_farm.show_single_variety_info(Big_White_Pig);
+						break;
+				}
+				break;
+			
+			
 			default:
 				is_exit = true;
 				break;
-				
+			
 		}
 		if(is_exit)
 		{

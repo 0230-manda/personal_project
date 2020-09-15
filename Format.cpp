@@ -18,6 +18,8 @@ struct rule
 	int sold_b_w_p;
 	float sold_money;
 	
+	int dead_pig;
+	
 	int day;
 	float money;
 	
@@ -32,6 +34,7 @@ struct rule
 		price_of_big_white_pig = 6;
 		day = 0;
 		money = 0;
+		dead_pig = 0;
 		max_rand_per_time = 100;
 	}
 	
@@ -79,7 +82,7 @@ void print_string(string str)
 	for(int k = 0;k < i;k++)
 	{
 		cout<<str[k];
-		Sleep(25);
+		Sleep(12);
 	}
 	cout<<'\n';
 }
@@ -132,6 +135,8 @@ void loop_display()
 	cout<<"      "<<"3. Show the info of a pig in specify serial number."<<'\n';
 	cout<<"      "<<"4. Into the next day."<<'\n';
 	cout<<"      "<<"5. Into the next month(30 days)"<<'\n';
+	cout<<"      "<<"6. Randomly set one pig sick"<<'\n';
+	cout<<"      "<<"7. Check status by variety"<<'\n';
 	cout<<"      "<<"Other input: exit the program"<<'\n';
 }
 

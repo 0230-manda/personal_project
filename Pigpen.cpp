@@ -18,12 +18,33 @@ class Pigpen
 		//---------------------------------------------
 		// set functions:
 		
+		void set_ill_rand()
+		{
+			node *node_ = &pigs;
+			int k = Random_num.get_rand_num(Random_num.get_seed(),Pigpen::get_pig_num());
+			for(int i = 0;i < k;i++)
+			{
+				node_ = node_->next_node;
+			}
+			node_->pig.set_sick(true);
+		}
+		
 		void set_random(int i)
 		{
 			for(int j = 0;j < i;j++)
 			{
 				add_random_pig(&pigs);
 			}
+		}
+		
+		void set_ill_in()
+		{
+			ill_in(&pigs);
+		}
+		
+		void set_ill_out()
+		{
+			ill_out(&pigs);
 		}
 		
 		//---------------------------------------------
@@ -146,7 +167,11 @@ class Pigpen
 		
 		void end_day()
 		{
-			has_ill = check_ill(&pigs);
 			chain_end_day(&pigs);
+		}
+		
+		void show_variety(_variety vari)
+		{
+			show_variety_info(&pigs,vari);
 		}
 };

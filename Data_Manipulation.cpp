@@ -37,6 +37,8 @@ bool check_ill(node *node_head);
 
 int get_node_num(node *node_head);
 
+void ill_in(node *node_head);
+void ill_out(node *node_head);
 void add_random_pig(node *node_head);
 void add_pig(node *from_node,node *node_head,node *oprt_node);
 void delete_node(node *node_head,node oprt_node);
@@ -48,6 +50,7 @@ void chain_end_day(node *node_head);
 void link_chain(node *head_parent,node *head_son);
 void clear_chain(node *node_head);
 void show_single_info(node *node_head,int p);
+void show_variety_info(node *node_head,_variety variety);
 //=========================================================
 node *head = nullptr;
 
@@ -143,8 +146,56 @@ bool check_ill(node *node_head)
 			}
 			node_ = node_->next_node;
 		}
+		else
+		{
+			break;
+		}
 	}
 	return ill;
+}
+
+void ill_in(node *node_head)
+{
+	int t = 0;
+	node *node_ = node_head;
+	for(;;)
+	{
+		if(node_ != nullptr)
+		{
+			t = Random_num.get_rand_num(Random_num.get_seed(),100);
+			if(t >= 50)
+			{
+				node_->pig.set_sick(true);
+			}
+			node_ = node_->next_node;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+void ill_out(node *node_head)
+{
+	int t = 0;
+	node *node_ = node_head;
+	for(;;)
+	{
+		if(node_ != nullptr)
+		{
+			t = Random_num.get_rand_num(Random_num.get_seed(),100);
+			if(t <= 15)
+			{
+				node_->pig.set_sick(true);
+			}
+			node_ = node_->next_node;
+		}
+		else
+		{
+			break;
+		}
+	}
 }
 
 void add_random_pig(node *node_head)
@@ -314,9 +365,12 @@ void sell_chain(node *node_head)
 					case Black_Pig:
 						if(node_->pig.get_weight() > main_rule.weight || node_->pig.get_age() > main_rule.age)
 						{
-							main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_black_pig;
-							main_rule.sold_b_p++;
-							delete_node(node_head,*node_);
+							if(node_->pig.get_if_sick() != true)
+							{
+								main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_black_pig;
+								main_rule.sold_b_p++;
+								delete_node(node_head,*node_);
+							}	
 						}
 						
 						break;
@@ -324,9 +378,12 @@ void sell_chain(node *node_head)
 					case Little_Pig:
 						if(node_->pig.get_weight() > main_rule.weight || node_->pig.get_age() > main_rule.age)
 						{
-							main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_little_pig;
-							main_rule.sold_l_p++;
-							delete_node(node_head,*node_);
+							if(node_->pig.get_if_sick() != true)
+							{
+								main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_little_pig;
+								main_rule.sold_l_p++;
+								delete_node(node_head,*node_);
+							}
 						}
 						
 						break;
@@ -334,9 +391,12 @@ void sell_chain(node *node_head)
 					case Big_White_Pig:
 						if(node_->pig.get_weight() > main_rule.weight || node_->pig.get_age() > main_rule.age)
 						{
-							main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_big_white_pig;
-							main_rule.sold_b_w_p++;
-							delete_node(node_head,*node_);
+							if(node_->pig.get_if_sick() != true)
+							{
+								main_rule.sold_money += node_->pig.get_weight() * main_rule.price_of_big_white_pig;
+								main_rule.sold_b_w_p++;
+								delete_node(node_head,*node_);
+							}
 						}
 						
 						break;
@@ -493,18 +553,37 @@ int get_node_num(node *node_head)
 void chain_end_day(node *node_head)
 {
 	node *node_ = node_head;
+	node *temp = node_;
 	if(get_node_num(node_head) == 0)
 	{
 		
 	}
 	else
 	{
+		temp = node_;
+		node_ = node_->next_node;
 		for(;;)
 		{
-			if(node_ != nullptr)
+			if(temp != nullptr)
 			{
-				node_->pig.gain_weight(Random_num.get_seed());
-				node_ = node_->next_node;
+				temp = node_;
+				if(node_ != nullptr)
+				{
+					node_ = node_->next_node;
+				}
+				if(temp != nullptr)
+				{
+					temp->pig.gain_weight(Random_num.get_seed());
+					if(temp->pig.get_if_sick())
+					{
+						temp->pig.sick_day_plus(1);
+					}
+					if(temp->pig.get_if_die())
+					{
+						remove_node(node_head,temp);
+						main_rule.dead_pig++;
+					}
+				}
 			}
 			else
 			{
@@ -610,4 +689,25 @@ void show_single_info(node *node_head,int p)
 	}
 	node_->pig.show_info();
 	cout<<'\n';
+}
+
+void show_variety_info(node *node_head,_variety variety)
+{
+	node *node_ = node_head;
+	for(;;)
+	{
+		if(node_ != nullptr)
+		{
+			if(node_->pig.get_variety() == variety)
+			{
+				node_->pig.show_info();
+				cout<<'\n';
+			}
+			node_ = node_->next_node;
+		}
+		else
+		{
+			break;
+		}
+	}
 }

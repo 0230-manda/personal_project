@@ -25,6 +25,7 @@ class Pig
 		int age;
 		_variety variety;
 		bool is_sick;
+		int sick_day;
 		//
 		//---------------------------------------------------
 		// private functions:
@@ -129,6 +130,18 @@ class Pig
 			return variety;
 		}
 		
+		bool get_if_die()
+		{
+			if(sick_day >= 10)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		
 		//---------------------------------------------------
 		// check-functions:
 		
@@ -206,6 +219,7 @@ class Pig
 			age = 0;
 			is_sick = false;
 			variety = Empty;
+			sick_day = 0;
 		}
 		
 		Pig(int i,_variety vari,int seed_)
@@ -237,6 +251,11 @@ class Pig
 		
 		//---------------------------------------------------
 		// other-functions:
+		
+		void sick_day_plus(int i)
+		{
+			sick_day += i;
+		}
 		
 		void gain_weight(int seed_)
 		{

@@ -82,7 +82,14 @@ class Farm
 		//-----------------------------------------
 		// set functions :
 		
-		
+		void set_pig_ill_rand()
+		{
+			int i = Random_num.get_rand_num(Random_num.get_seed(),100);
+			if(total != 0)
+			{
+				pigpens[i].set_ill_rand();
+			}
+		}
 		
 		//-----------------------------------------
 		// check functions :
@@ -221,6 +228,62 @@ class Farm
 		{
 			for(int i = 0;i < 100;i++)
 			{
+				if(i == 0)
+				{
+					if(pigpens[99].check_if_ill() || pigpens[1].check_if_ill())
+					{
+						if(pigpens[i].has_ill != true)
+						{
+							pigpens[i].going_to_ill = true;
+						}
+						else
+						{
+							pigpens[i].going_to_ill = false;
+						}
+					}
+				}
+				else if(i == 99)
+				{
+					if(pigpens[0].check_if_ill() || pigpens[98].check_if_ill())
+					{
+						if(pigpens[i].has_ill != true)
+						{
+							pigpens[i].going_to_ill = true;
+						}
+						else
+						{
+							pigpens[i].going_to_ill = false;
+						}
+					}
+				}
+				else
+				{
+					if(pigpens[i - 1].check_if_ill() || pigpens[i + 1].check_if_ill())
+					{
+						if(pigpens[i].has_ill != true)
+						{
+							pigpens[i].going_to_ill = true;
+						}
+						else
+						{
+							pigpens[i].going_to_ill = false;
+						}
+					}
+				}
+			}
+			for(int i = 0;i < 100;i++)
+			{
+				if(pigpens[i].going_to_ill && !pigpens[i].has_ill)
+				{
+					pigpens[i].set_ill_out();
+				}
+				else if(!pigpens[i].going_to_ill && pigpens[i].has_ill)
+				{
+					pigpens[i].set_ill_in();
+				}
+			}
+			for(int i = 0;i < 100;i++)
+			{
 				pigpens[i].end_day();
 			}
 			main_rule.day++;
@@ -294,6 +357,15 @@ class Farm
 				system("pause");
 				refresh_screen();
 			}
+		}
+		
+		void show_single_variety_info(_variety vari)
+		{
+			for(int i = 0;i < 100;i++)
+			{
+				pigpens[i].show_variety(vari);
+			}
+			system("pause");
 		}
 		
 		void pig_distributor()
